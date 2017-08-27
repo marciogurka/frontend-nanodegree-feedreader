@@ -33,12 +33,10 @@ $(function() {
          */
 
         it('have an URL defined', function(){
-            expect(allFeeds).toBeDefined();
-            expect(allFeeds.length).not.toBe(0);
-
-            for (var i = 0; i < allFeeds.length; i++){
-                expect(allFeeds[i].url).toBeDefined();
-            }
+            allFeeds.forEach(function (feed) {
+                expect(feed.url).toBeTruthy();
+                expect(feed.name).not.toBe("");
+            });
         });
 
 
@@ -49,13 +47,10 @@ $(function() {
          */
 
         it('have an name defined', function(){
-            expect(allFeeds).toBeDefined();
-            expect(allFeeds.length).not.toBe(0);
-
-            for (var i = 0; i < allFeeds.length; i++){
-                expect(allFeeds[i].name).toBeDefined();
-                expect(allFeeds[i].name).not.toBe("");
-            }
+            allFeeds.forEach(function (feed) {
+                expect(feed.name).toBeTruthy();
+                expect(feed.name).not.toBe("");
+            });
         });
     });
 
@@ -63,7 +58,6 @@ $(function() {
     describe('The menu', function() {
 
         function checkMenuIsBeingShowed(){
-
             return $(".menu-hidden").length == 0;
         }
 
@@ -84,11 +78,10 @@ $(function() {
          */
 
         it('should be showed when we click at .menu-icon-link, and be hidden when we click at .menu-icon-link again', function () {
-            $('body').addClass('menu-hidden');
-            $(".menu-icon-link").trigger("click");
-            expect(checkMenuIsBeingShowed()).toBe(true);
-            $(".menu-icon-link").trigger("click");
-            expect(checkMenuIsBeingShowed()).toBe(false);
+            $(".menu-icon-link").click();
+            expect($('body').hasClass('menu-hidden')).toBe(false);
+            $(".menu-icon-link").click();
+            expect($('body').hasClass('menu-hidden')).toBe(true);
         });
     });
 
@@ -96,7 +89,9 @@ $(function() {
     describe('Initial Entries', function() {
 
         beforeEach(function(done) {
-            loadFeed(0, done);
+            loadFeed(0, function () {
+                done();
+            });
         });
 
         function checkThereIsAnEntryElement(){
@@ -127,7 +122,9 @@ $(function() {
         beforeEach(function(done) {
             loadFeed(0, function () {
                 firstEntries = $('.entry');
-                loadFeed(1, done);
+                loadFeed(1, function () {
+                    done();
+                });
             });
         });
 
@@ -150,6 +147,12 @@ $(function() {
             secondEntries = $('.entry');
             expect(checkEntriesAreEquals(firstEntries, secondEntries)).toBe(false);
             done();
+        });
+
+        afterEach(function(done) {
+            loadFeed(0, function() {
+                done();
+            });
         });
 
 
