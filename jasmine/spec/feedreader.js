@@ -34,8 +34,8 @@ $(function() {
 
         it('have an URL defined', function(){
             allFeeds.forEach(function (feed) {
-                expect(feed.url).toBeTruthy();
-                expect(feed.name).not.toBe("");
+                expect(feed.url).toBeDefined();
+                expect(feed.url).not.toBe("");
             });
         });
 
@@ -48,7 +48,7 @@ $(function() {
 
         it('have an name defined', function(){
             allFeeds.forEach(function (feed) {
-                expect(feed.name).toBeTruthy();
+                expect(feed.name).toBeDefined();
                 expect(feed.name).not.toBe("");
             });
         });
@@ -95,7 +95,7 @@ $(function() {
         });
 
         function checkThereIsAnEntryElement(){
-            return $(".entry").length > 0;
+            return $(".feed .entry").length > 0;
         }
 
         /* This is a test that ensures when the loadFeed
@@ -105,9 +105,8 @@ $(function() {
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
 
-        it("should have at least one .entry element after loadFeed()", function(done) {
+        it("should have at least one .entry element after loadFeed()", function() {
             expect(checkThereIsAnEntryElement()).toBe(true);
-            done();
         });
 
 
@@ -143,10 +142,9 @@ $(function() {
          * Remember, loadFeed() is asynchronous.
          */
 
-        it("should have updated entries every loadFeed() execution", function(done) {
+        it("should have updated entries every loadFeed() execution", function() {
             secondEntries = $('.entry');
             expect(checkEntriesAreEquals(firstEntries, secondEntries)).toBe(false);
-            done();
         });
 
         afterEach(function(done) {
